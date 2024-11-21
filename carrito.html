@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex flex-col">
+    <!-- Header -->
+    <header class="bg-gray-900 text-white py-4 shadow-md">
+        <div class="container mx-auto flex items-center justify-between px-4">
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center space-x-2 cursor-pointer">
+                <div class="bg-yellow-400 text-gray-900 font-bold text-xl p-2 rounded-full">JSW</div>
+                <span class="text-lg font-semibold">Tienda</span>
+            </a>
+
+            <!-- Icons -->
+            <div class="flex items-center space-x-4">
+                <!-- Persona Icon -->
+                <button class="hover:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M5.121 17.804A6 6 0 1118.879 17.8M12 11a4 4 0 100-8 4 4 0 000 8z" />
+                    </svg>
+                </button>
+
+                <!-- Carrito Icon -->
+                <a href="cart.html" class="relative hover:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2-8H2m5 8h10m-2 0a2 2 0 11-4 0m4 0a2 2 0 11-4 0" />
+                    </svg>
+                    <span id="cart-counter"
+                        class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto py-8 flex-1">
+        <h1 class="text-2xl font-bold mb-6 text-center">Carrito de Compras</h1>
+
+        <div id="cart-items" class="space-y-6">
+            <!-- Aquí se cargarán dinámicamente los productos del carrito -->
+        </div>
+
+        <!-- Total y Botón -->
+        <div class="border-t border-gray-300 pt-4 mt-6">
+            <div class="flex justify-between items-center">
+                <span class="text-lg font-semibold">Total:</span>
+                <span id="cart-total" class="text-xl font-bold">€0.00</span>
+            </div>
+            <button id="checkout-button"
+                class="mt-4 w-full bg-gray-900 text-white py-2 rounded-lg hover:bg-yellow-400 hover:text-gray-900 transition">
+                Comprar
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-4 text-center">
+        <p>&copy; 2024 JSW Tienda. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

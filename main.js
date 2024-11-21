@@ -340,15 +340,21 @@ class ProductSearch extends HTMLElement {
 
   async performSearch(term) {
     const lowerTerm = term.toLowerCase();
-    const filteredProducts = this.allProducts.filter(
-      (product) =>
-        product.name.toLowerCase().includes(lowerTerm) ||
-        (product.short_description &&
-          product.short_description.toLowerCase().includes(lowerTerm)) ||
-        (product.tags &&
-          product.tags.some((tag) => tag.toLowerCase().includes(lowerTerm))) ||
-        (product.category && product.category.toLowerCase().includes(lowerTerm))
-    );
+    const filteredProducts = this.allProducts.filter((product) => {
+      const name = product.name?.toLowerCase() || ""; // Aseguramos que name exista
+      const description = product.short_description?.toLowerCase() || ""; // Aseguramos que description exista
+      const tags = product.tags
+        ? product.tags.map((tag) => tag?.toLowerCase()).join(" ")
+        : ""; // Convertimos tags a un string manejando errores
+      const category = product.category?.toLowerCase() || ""; // Aseguramos que category exista
+
+      return (
+        name.includes(lowerTerm) ||
+        description.includes(lowerTerm) ||
+        tags.includes(lowerTerm) ||
+        category.includes(lowerTerm)
+      );
+    });
 
     this.renderProducts(filteredProducts);
   }
@@ -405,3 +411,314 @@ class ProductSearch extends HTMLElement {
 }
 
 customElements.define("product-search", ProductSearch);
+
+class ShoppingCart extends HTMLElement {
+  constructor() {
+    super();
+    this.cartItems = [];
+    this.attachShadow({ mode: "open" });
+  }
+
+  connectedCallback() {
+    this.render();
+    this.updateCartIcon();
+    this.addEventListeners();
+  }
+
+  render() {
+    this.shadowRoot.innerHTML = `
+      <style>
+        .cart-icon {
+          position: relative;
+          cursor: pointer;
+        }
+
+        .cart-counter {
+          position: absolute;
+          top: -5px;
+          right: -10px;
+          background: #f00;
+          color: white;
+          font-size: 12px;
+          font-weight: bold;
+          border-radius: 50%;
+          padding: 0 5px;
+        }
+
+        dialog {
+          border: 1px solid #e5e7eb;
+          border-radius: 0.5rem;
+          padding: 1rem;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          max-width: 800px;
+          width: 100%;
+          overflow-y: auto;
+          max-height: 80vh;
+        }
+
+        .cart-summary {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .cart-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          border-bottom: 1px solid #e5e7eb;
+          padding-bottom: 0.5rem;
+        }
+
+        .cart-item img {
+          width: 50px;
+          height: 50px;
+          object-fit: cover;
+          border-radius: 0.5rem;
+        }
+
+        .cart-item-details {
+          flex: 1;
+          margin-left: 1rem;
+        }
+
+        .cart-total {
+          font-weight: bold;
+          text-align: right;
+          margin-top: 1rem;
+        }
+
+        .checkout-button {
+          display: block;
+          width: 100%;
+          padding: 1rem;
+          background: black;
+          color: white;
+          text-align: center;
+          font-weight: bold;
+          border: none;
+          border-radius: 0.5rem;
+          cursor: pointer;
+        }
+
+        .checkout-button:hover {
+          background: #333;
+        }
+
+        .empty-cart {
+          text-align: center;
+          color: #9ca3af;
+          font-size: 1rem;
+          margin-top: 2rem;
+        }
+
+        .close-btn {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          background: transparent;
+          border: none;
+          font-size: 1.5rem;
+          cursor: pointer;
+          color: #6b7280;
+        }
+
+        .close-btn:hover {
+          color: #4b5563;
+        }
+      </style>
+
+      <button class="cart-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2-8H2m5 8h10m-2 0a2 2 0 11-4 0m4 0a2 2 0 11-4 0" />
+        </svg>
+        <span class="cart-counter">0</span>
+      </button>
+
+      <dialog>
+        <button class="close-btn">&times;</button>
+        <h2>Resumen del Carrito</h2>
+        <div class="cart-summary"></div>
+        <div class="cart-total"></div>
+        <button class="checkout-button">Comprar</button>
+      </dialog>
+    `;
+  }
+
+  addEventListeners() {
+    const cartIcon = this.shadowRoot.querySelector(".cart-icon");
+    const dialog = this.shadowRoot.querySelector("dialog");
+    const closeBtn = this.shadowRoot.querySelector(".close-btn");
+    const checkoutButton = this.shadowRoot.querySelector(".checkout-button");
+
+    cartIcon.addEventListener("click", () => dialog.showModal());
+    closeBtn.addEventListener("click", () => dialog.close());
+    checkoutButton.addEventListener("click", () => this.checkout());
+  }
+
+  addToCart(product) {
+    const existingItem = this.cartItems.find((item) => item.id === product.id);
+
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      this.cartItems.push({ ...product, quantity: 1 });
+    }
+
+    this.updateCartIcon();
+    this.updateCartSummary();
+  }
+
+  updateCartIcon() {
+    const cartCounter = this.shadowRoot.querySelector(".cart-counter");
+    const totalItems = this.cartItems.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
+    cartCounter.textContent = totalItems;
+  }
+
+  updateCartSummary() {
+    const cartSummary = this.shadowRoot.querySelector(".cart-summary");
+    const cartTotal = this.shadowRoot.querySelector(".cart-total");
+
+    cartSummary.innerHTML = "";
+
+    if (this.cartItems.length === 0) {
+      cartSummary.innerHTML = '<p class="empty-cart">Tu carrito está vacío</p>';
+      cartTotal.textContent = "";
+      return;
+    }
+
+    this.cartItems.forEach((item) => {
+      const cartItem = document.createElement("div");
+      cartItem.className = "cart-item";
+
+      cartItem.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" />
+        <div class="cart-item-details">
+          <p>${item.name}</p>
+          <p>Cantidad: ${item.quantity}</p>
+        </div>
+        <p>${item.price} €</p>
+      `;
+
+      cartSummary.appendChild(cartItem);
+    });
+
+    const total = this.cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    cartTotal.textContent = `Total: ${total.toFixed(2)} €`;
+  }
+
+  checkout() {
+    alert("¡Gracias por tu compra! El carrito será vaciado.");
+    this.cartItems = [];
+    this.updateCartIcon();
+    this.updateCartSummary();
+    this.shadowRoot.querySelector("dialog").close();
+  }
+}
+
+// Define el elemento personalizado
+customElements.define("shopping-cart", ShoppingCart);
+
+// Añadir funcionalidad al botón "Add to cart"
+document.addEventListener("DOMContentLoaded", () => {
+  const cartElement = document.querySelector("shopping-cart");
+
+  document.querySelectorAll(".add-to-cart").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      const productCard = event.target.closest(".product");
+      const product = {
+        id: productCard.dataset.id,
+        name: productCard.querySelector(".name").textContent,
+        price: parseFloat(
+          productCard.querySelector(".price").textContent.replace("€", "")
+        ),
+        image: productCard.querySelector(".image").src,
+      };
+
+      cartElement.addToCart(product);
+    });
+  });
+});
+
+const cartData = []; // Aquí estará tu carrito (puedes llenarlo con datos reales desde "Add to cart")
+
+const cartItemsContainer = document.getElementById("cart-items");
+const cartTotalElement = document.getElementById("cart-total");
+const checkoutButton = document.getElementById("checkout-button");
+
+// Renderizar el carrito
+function renderCart() {
+  cartItemsContainer.innerHTML = "";
+  let total = 0;
+
+  if (cartData.length === 0) {
+    cartItemsContainer.innerHTML = `
+            <p class="text-center text-gray-500">Tu carrito está vacío. <a href="index.html" class="text-yellow-400 underline">Ir a la tienda</a></p>
+        `;
+    cartTotalElement.textContent = "€0.00";
+    return;
+  }
+
+  cartData.forEach((item) => {
+    const itemTotal = item.price * item.quantity;
+    total += itemTotal;
+
+    const cartItem = document.createElement("div");
+    cartItem.className =
+      "flex justify-between items-center border-b border-gray-300 pb-4";
+
+    cartItem.innerHTML = `
+            <div class="flex items-center">
+                <img src="${item.image}" alt="${
+      item.name
+    }" class="w-16 h-16 rounded-lg object-cover">
+                <div class="ml-4">
+                    <h2 class="font-semibold">${item.name}</h2>
+                    <p class="text-sm text-gray-500">${item.description}</p>
+                    <div class="text-sm text-gray-500">Cantidad: ${
+                      item.quantity
+                    }</div>
+                </div>
+            </div>
+            <div class="text-right">
+                <p class="font-semibold text-lg">€${item.price.toFixed(2)}</p>
+                <button data-id="${
+                  item.id
+                }" class="text-red-500 hover:underline remove-item">Eliminar</button>
+            </div>
+        `;
+
+    cartItemsContainer.appendChild(cartItem);
+  });
+
+  cartTotalElement.textContent = `€${total.toFixed(2)}`;
+}
+
+// Vaciar carrito al finalizar la compra
+checkoutButton.addEventListener("click", () => {
+  alert("¡Gracias por tu compra!");
+  cartData.length = 0; // Vaciar carrito
+  renderCart();
+});
+
+// Eliminar producto del carrito
+cartItemsContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("remove-item")) {
+    const id = parseInt(e.target.dataset.id, 10);
+    const index = cartData.findIndex((item) => item.id === id);
+    if (index > -1) {
+      cartData.splice(index, 1);
+    }
+    renderCart();
+  }
+});
+
+// Inicializar renderizado del carrito
+renderCart();
