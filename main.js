@@ -40,29 +40,41 @@ const keyMappings = {
       this.innerHTML = "";
   
       products.forEach((product) => {
-        // Clonar el contenido de la plantilla
-        const productContent = document.importNode(template.content, true);
+          // Clonar el contenido de la plantilla
+          const productContent = document.importNode(template.content, true);
   
-        // Asignar datos al producto
-        productContent.querySelector(".name").textContent = product.name;
-        productContent.querySelector(".price").textContent = `${product.price}`;
-        productContent.querySelector(".image").src = product.image;
-        productContent.querySelector(".product").setAttribute("data-id", product.id);
+          // Asignar datos al producto
+          productContent.querySelector(".name").textContent = product.name;
+          productContent.querySelector(".price").textContent = `${product.price}`;
+          productContent.querySelector(".image").src = product.image;
+          productContent.querySelector(".product").setAttribute("data-id", product.id);
   
-        // Hacer clic en el producto redirige a la página de detalles
-        productContent.querySelector(".product").addEventListener("click", (e) => {
-          // Evitar que el clic en el botón "Añadir al carrito" redirija
-          if (e.target.classList.contains("add-to-cart")) {
-            e.stopPropagation();
-            return;
+          // Renderizar tags si existen
+          const tagsContainer = productContent.querySelector(".tags");
+          if (product.tags && Array.isArray(product.tags)) {
+              product.tags.forEach((tag) => {
+                  const tagElement = document.createElement("span");
+                  tagElement.textContent = `#${tag}`;
+                  tagElement.className = "bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs m-1 hover:bg-gray-300 hover:text-gray-900 transition-colors duration-200";
+                  tagsContainer.appendChild(tagElement);
+              });
           }
-          window.location.href = `product.html?id=${product.id}`;
-        });
   
-        // Añadir el producto al componente
-        this.appendChild(productContent);
+          // Hacer clic en el producto redirige a la página de detalles
+          productContent.querySelector(".product").addEventListener("click", (e) => {
+              // Evitar que el clic en el botón "Añadir al carrito" redirija
+              if (e.target.classList.contains("add-to-cart")) {
+                  e.stopPropagation();
+                  return;
+              }
+              window.location.href = `product.html?id=${product.id}`;
+          });
+  
+          // Añadir el producto al componente
+          this.appendChild(productContent);
       });
-    }
+  }
+  
   }
   
   // Definir el elemento personalizado
@@ -152,7 +164,7 @@ class CustomProduct extends HTMLElement {
       this.innerHTML = `<p>Producto no encontrado.</p>`;
     }
 
-    console.log("Producto renderizado correctamente");
+    // console.log("Producto renderizado correctamente");
   }
 }
 
