@@ -8,57 +8,66 @@ const keyMappings = {
   };
   
 
-class ProductsViewer extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  connectedCallback() {
-    this.loadProducts();
-  }
-
-  async loadProducts() {
-    try {
-      const response = await fetch(
-        `https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets`
-      );
-      if (!response.ok) {
-        throw new Error("Error al obtener los productos");
+  class ProductsViewer extends HTMLElement {
+    constructor() {
+      super();
+    }
+  
+    connectedCallback() {
+      this.loadProducts();
+    }
+  
+    async loadProducts() {
+      try {
+        const response = await fetch(
+          `https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets`
+        );
+        if (!response.ok) {
+          throw new Error("Error al obtener los productos");
+        }
+        const products = await response.json();
+        this.renderProducts(products);
+      } catch (error) {
+        console.error("Error:", error);
+        this.innerHTML = `<p>Error al cargar los productos. Inténtelo nuevamente más tarde.</p>`;
       }
-      const products = await response.json();
-      this.renderProducts(products);
-    } catch (error) {
-      console.error("Error:", error);
-      this.innerHTML = `<p>Error al cargar los productos. Inténtelo nuevamente más tarde.</p>`;
+    }
+  
+    renderProducts(products) {
+      const template = document.getElementById("product-template");
+  
+      // Limpiar contenido existente
+      this.innerHTML = "";
+  
+      products.forEach((product) => {
+        // Clonar el contenido de la plantilla
+        const productContent = document.importNode(template.content, true);
+  
+        // Asignar datos al producto
+        productContent.querySelector(".name").textContent = product.name;
+        productContent.querySelector(".price").textContent = `${product.price}`;
+        productContent.querySelector(".image").src = product.image;
+        productContent.querySelector(".product").setAttribute("data-id", product.id);
+  
+        // Hacer clic en el producto redirige a la página de detalles
+        productContent.querySelector(".product").addEventListener("click", (e) => {
+          // Evitar que el clic en el botón "Añadir al carrito" redirija
+          if (e.target.classList.contains("add-to-cart")) {
+            e.stopPropagation();
+            return;
+          }
+          window.location.href = `product.html?id=${product.id}`;
+        });
+  
+        // Añadir el producto al componente
+        this.appendChild(productContent);
+      });
     }
   }
-
-  renderProducts(products) {
-    const template = document.getElementById("product-template");
-
-    // Limpiar contenido existente
-    this.innerHTML = "";
-
-    products.forEach((product) => {
-      // Clonar el contenido de la plantilla
-      const productContent = document.importNode(template.content, true);
-
-      // Rellenar la plantilla con los datos del producto
-      productContent.querySelector(".name").textContent = product.name;
-      productContent.querySelector(".price").textContent = `$${product.price}`;
-      productContent.querySelector(".image").src = product.image;
-      productContent.querySelector(
-        ".link"
-      ).href = `./product.html?id=${product.id}`;
-
-      // Añadir el producto al componente
-      this.appendChild(productContent);
-    });
-  }
-}
-
-// Definir el elemento personalizado
-customElements.define("products-viewer", ProductsViewer);
+  
+  // Definir el elemento personalizado
+  customElements.define("products-viewer", ProductsViewer);
+  
 
 const getId = () => {
   const searchParams = new URLSearchParams(location.search.slice(1));
@@ -95,7 +104,7 @@ class CustomProduct extends HTMLElement {
     if (product) {
       this.querySelector(".name").textContent = product.name;
       this.querySelector(".image").src = product.image;
-      this.querySelector(".price").textContent = `$${product.price}`;
+      this.querySelector(".price").textContent = `${product.price}`;
       this.querySelector(".description").textContent = product.description;
 
       // Crear un contenedor para las características adicionales
