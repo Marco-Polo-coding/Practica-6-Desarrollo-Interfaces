@@ -186,130 +186,137 @@ class ProductSearch extends HTMLElement {
 
   connectedCallback() {
     this.shadowRoot.innerHTML = `
-        <style>
-            dialog {
-                border: 1px solid #e5e7eb;
-                border-radius: 0.5rem;
-                padding: 1rem;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                max-width: 800px;
-                width: 100%;
-                overflow-y: auto;
-                max-height: 80vh;
-            }
+          <style>
+              dialog {
+                  border: 1px solid #e5e7eb;
+                  border-radius: 0.5rem;
+                  padding: 1rem;
+                  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                  max-width: 800px;
+                  width: 100%;
+                  overflow-y: auto;
+                  max-height: 80vh;
+                  text-align: center;
+              }
 
-            input {
-                width: 100%;
-                padding: 0.5rem 1rem;
-                border: 1px solid #d1d5db;
-                border-radius: 0.5rem;
-                margin-bottom: 1rem;
-                outline: none;
-                font-size: 1rem;
-            }
+              input {
+                  width: 100%;
+                  padding: 0.5rem 1rem;
+                  border: 1px solid #d1d5db;
+                  border-radius: 0.5rem;
+                  margin-bottom: 1rem;
+                  outline: none;
+                  font-size: 1rem;
+              }
 
-            .product-card {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                padding: 1rem;
-                border: 1px solid #e5e7eb;
-                border-radius: 0.5rem;
-                margin-bottom: 1rem;
-                background-color: #ffffff;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                transition: transform 0.2s, box-shadow 0.2s;
-                cursor: pointer;
-            }
+              .product-card {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  padding: 1rem;
+                  border: 1px solid #e5e7eb;
+                  border-radius: 0.5rem;
+                  margin-bottom: 1rem;
+                  background-color: #ffffff;
+                  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                  transition: transform 0.2s, box-shadow 0.2s;
+                  cursor: pointer;
+              }
 
-            .product-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-            }
+              .product-card:hover {
+                  transform: translateY(-5px);
+                  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+              }
 
-            .product-card img {
-                width: 120px;
-                height: 120px;
-                object-fit: cover;
-                border-radius: 0.5rem;
-                margin-bottom: 1rem;
-            }
+              .product-card img {
+                  width: 120px;
+                  height: 120px;
+                  object-fit: cover;
+                  border-radius: 0.5rem;
+                  margin-bottom: 1rem;
+              }
 
-            .product-info {
-                text-align: center;
-            }
+              .product-info {
+                  text-align: center;
+              }
 
-            .product-name {
-                font-weight: bold;
-                font-size: 1.2rem;
-                margin-bottom: 0.5rem;
-                color: #333;
-            }
+              .product-name {
+                  font-weight: bold;
+                  font-size: 1.2rem;
+                  margin-bottom: 0.5rem;
+                  color: #333;
+              }
 
-            .product-price {
-                color: #4caf50;
-                font-weight: bold;
-                margin-bottom: 0.5rem;
-            }
+              .product-price {
+                  color: #4caf50;
+                  font-weight: bold;
+                  margin-bottom: 0.5rem;
+              }
 
-            .product-description {
-                color: #6b7280;
-                font-size: 0.9rem;
-            }
+              .product-description {
+                  color: #6b7280;
+                  font-size: 0.9rem;
+              }
 
-            .close-btn {
-                position: absolute;
-                top: 0.5rem;
-                right: 0.5rem;
-                background: transparent;
-                border: none;
-                font-size: 1.5rem;
-                cursor: pointer;
-                color: #6b7280;
-            }
+              .close-btn {
+                  position: absolute;
+                  top: 0.5rem;
+                  right: 0.5rem;
+                  background: transparent;
+                  border: none;
+                  font-size: 1.5rem;
+                  cursor: pointer;
+                  color: #6b7280;
+              }
 
-            .close-btn:hover {
-                color: #4b5563;
-            }
+              .close-btn:hover {
+                  color: #4b5563;
+              }
 
-            #open-search-dialog {
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
+              #open-search-dialog {
+                  background: transparent;
+                  border: none;
+                  cursor: pointer;
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+              }
 
-            #open-search-dialog svg {
-                height: 2rem;
-                width: 2rem;
-                fill: none;
-                stroke: white; /* Cambiar el color del ícono a blanco */
-                stroke-width: 2;
-            }
+              #open-search-dialog svg {
+                  height: 2rem;
+                  width: 2rem;
+                  fill: none;
+                  stroke: white;
+                  stroke-width: 2;
+              }
 
-            #open-search-dialog:hover svg {
-                stroke: #facc15; /* Cambiar el color del ícono a amarillo al pasar el mouse */
-            }
-            }
-        </style>
-        <button id="open-search-dialog" class="hover:text-yellow-400">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
-                stroke="currentColor" stroke-width="2">
-                <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round">
-                </line>
-            </svg>
-        </button>
+              #open-search-dialog:hover svg {
+                  stroke: #facc15;
+              }
 
-        <dialog>
-            <button class="close-btn">&times;</button>
-            <h2>Buscar Productos</h2>
-            <input type="text" id="search-input" placeholder="Escribe para buscar..." />
-            <div id="search-results"></div>
-        </dialog>
-    `;
+              dialog h2 {
+                  text-align: center;
+                  font-weight: bold;
+                  font-size: 1.5rem;
+                  margin-bottom: 1rem;
+              }
+          </style>
+          <button id="open-search-dialog" class="hover:text-yellow-400">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round">
+                  </line>
+              </svg>
+          </button>
+
+          <dialog>
+              <button class="close-btn">&times;</button>
+              <h2>¿Qué quieres buscar?</h2>
+              <input type="text" id="search-input" placeholder="Escribe para buscar..." />
+              <div id="search-results"></div>
+          </dialog>
+      `;
 
     this.dialog = this.shadowRoot.querySelector("dialog");
     this.searchInput = this.shadowRoot.querySelector("#search-input");
@@ -321,32 +328,47 @@ class ProductSearch extends HTMLElement {
   }
 
   addEventListeners() {
-    this.openDialogBtn.addEventListener("click", () => this.dialog.showModal());
+    this.openDialogBtn.addEventListener("click", () => {
+      this.dialog.showModal();
+      this.searchResults.innerHTML = "";
+      this.searchInput.value = "";
+    });
     this.closeDialogBtn.addEventListener("click", () => this.dialog.close());
     this.searchInput.addEventListener("input", (e) =>
       this.performSearch(e.target.value)
     );
-    this.fetchAndDisplayAllProducts(); // Fetch all products initially
+    this.fetchAndDisplayAllProducts();
   }
 
   async fetchAndDisplayAllProducts() {
-    const response = await fetch(
-      "https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets"
-    );
-    const products = await response.json();
-    this.allProducts = products; // Save all products for local filtering
-    this.renderProducts(products); // Display all products by default
+    try {
+      const response = await fetch(
+        "https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets"
+      );
+      const products = await response.json();
+      this.allProducts = products;
+    } catch (error) {
+      console.error("Error al cargar los productos:", error);
+      this.allProducts = [];
+    }
   }
 
   async performSearch(term) {
-    const lowerTerm = term.toLowerCase();
+    const lowerTerm = term.toLowerCase().trim();
+
+    // Si el término de búsqueda está vacío, no mostrar productos
+    if (!lowerTerm) {
+      this.searchResults.innerHTML = ""; // Limpiar resultados
+      return;
+    }
+
     const filteredProducts = this.allProducts.filter((product) => {
-      const name = product.name?.toLowerCase() || ""; // Aseguramos que name exista
-      const description = product.short_description?.toLowerCase() || ""; // Aseguramos que description exista
+      const name = product.name?.toLowerCase() || "";
+      const description = product.short_description?.toLowerCase() || "";
       const tags = product.tags
         ? product.tags.map((tag) => tag?.toLowerCase()).join(" ")
-        : ""; // Convertimos tags a un string manejando errores
-      const category = product.category?.toLowerCase() || ""; // Aseguramos que category exista
+        : "";
+      const category = product.category?.toLowerCase() || "";
 
       return (
         name.includes(lowerTerm) ||
