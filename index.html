@@ -12,6 +12,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -42,24 +43,47 @@
             <!-- Icons -->
             <div class="flex items-center space-x-4">
                 <!-- Persona Icon -->
-                <button class="hover:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A6 6 0 1118.879 17.8M12 11a4 4 0 100-8 4 4 0 000 8z" />
+                <button class="hover:text-yellow-400 relative" popovertarget="persona-menu" aria-haspopup="menu" anchor>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M5.121 17.804A6 6 0 1118.879 17.8M12 11a4 4 0 100-8 4 4 0 000 8z" />
                     </svg>
                 </button>
 
+                <!-- Menú desplegable -->
+                <div popover id="persona-menu"
+                    class="hidden absolute bg-white border border-gray-300 shadow-lg rounded-lg p-4 w-40 right-0">
+                    <ul class="text-gray-700">
+                        <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
+                            <a href="index.html">Inicio</a>
+                        </li>
+                        <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
+                            <a href="contact.html">Contacto</a>
+                        </li>
+                        <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
+                            <a href="about.html">About Us</a>
+                        </li>
+                    </ul>
+                </div>
+
+
                 <!-- Search Icon -->
                 <button class="hover:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round"></line>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round">
+                        </line>
                     </svg>
                 </button>
 
                 <!-- Carrito Icon -->
                 <button class="relative hover:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2-8H2M7 13h10m-2 0a2 2 0 11-4 0m4 0a2 2 0 11-4 0" />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2-8H2M7 13h10m-2 0a2 2 0 11-4 0m4 0a2 2 0 11-4 0" />
                     </svg>
                     <span class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2">0</span>
                 </button>
@@ -86,8 +110,7 @@
 
     <!-- Plantilla para productos -->
     <template id="product-template">
-        <div 
-            class="product bg-white shadow-md rounded-lg overflow-hidden transform transition-transform hover:scale-105 hover:shadow-lg cursor-pointer"
+        <div class="product bg-white shadow-md rounded-lg overflow-hidden transform transition-transform hover:scale-105 hover:shadow-lg cursor-pointer"
             data-id="">
             <img class="image w-full h-48 object-cover" alt="Product image">
             <div class="p-4 text-center">
@@ -98,19 +121,27 @@
                 <!-- Contenedor para los botones -->
                 <div class="flex space-x-2 justify-center">
                     <!-- Botón Añadir al carrito -->
-                    <button class="add-to-cart bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 transition">
+                    <button
+                        class="add-to-cart bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 transition">
                         Add to cart
                     </button>
                     <!-- Botón Ver características -->
-                    <button class="specs-btn bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                    <button class="specs-btn bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                        popovertarget="empty-menu" aria-haspopup="menu" anchor>
                         Specs
                     </button>
+                    <div popover id="empty-menu"
+                        class="hidden absolute bg-white border border-gray-300 shadow-lg rounded-lg p-4 w-64">
+                        <p class="text-gray-500 text-center">Empty menu</p>
+                    </div>
+
+
                 </div>
             </div>
         </div>
     </template>
-    
-    
+
+
 
     <script src="main.js"></script>
 </body>
