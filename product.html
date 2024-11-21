@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Producto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+
+    <custom-product class="product bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl mx-auto p-6">
+        <div class="flex flex-col md:flex-row gap-6 items-center">
+            <!-- Imagen del producto -->
+            <div class="w-full md:w-1/2">
+                <img class="image w-full h-64 object-cover rounded-lg" alt="Imagen del producto" />
+            </div>
+
+            <!-- Detalles del producto -->
+            <div class="w-full md:w-1/2">
+                <h3 class="name text-2xl font-bold mb-4">Cargando producto...</h3>
+                <p class="price text-xl text-gray-700 font-semibold mb-4">
+                    <strong>Precio:</strong> <span class="text-green-600">Cargando precio...</span>
+                </p>
+                <p class="description text-gray-600 leading-relaxed mb-6">
+                    Cargando descripción...
+                </p>
+                <div class="features">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2"></h4>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-700">
+                      <!-- Las características se renderizan dinámicamente aquí -->
+                    </ul>
+                  </div>
+                  
+                <hr class="my-4">
+                <a href="index.html" class="inline-block bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition">
+                    Volver a la tienda
+                </a>
+            </div>
+        </div>
+    </custom-product>
+
+    <script src="main.js"></script>
+</body>
+
+</html>
