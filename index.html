@@ -11,14 +11,14 @@
 <body class="bg-gray-100 min-h-screen">
 
     <!-- Header -->
-    <header class="bg-gray-900 text-white py-4 shadow-md">
+    <header class="bg-gray-900 text-white py-4 shadow-md sticky top-0 z-50">
         <div class="container mx-auto flex items-center justify-between px-4">
             <!-- Logo -->
-            <div class="flex items-center space-x-2">
-                <div class="bg-yellow-400 text-gray-900 font-bold text-xl p-2 rounded-full">JST</div>
+            <a href="index.html" class="flex items-center space-x-2 cursor-pointer">
+                <div class="bg-yellow-400 text-gray-900 font-bold text-xl p-2 rounded-full">JSW</div>
                 <span class="text-lg font-semibold">Tienda</span>
-            </div>
-    
+            </a>
+
             <!-- Icons -->
             <div class="flex items-center space-x-4">
                 <!-- Persona Icon -->
@@ -27,16 +27,15 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A6 6 0 1118.879 17.8M12 11a4 4 0 100-8 4 4 0 000 8z" />
                     </svg>
                 </button>
-    
+
                 <!-- Search Icon -->
                 <button class="hover:text-yellow-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round"></line>
                     </svg>
-                    
                 </button>
-    
+
                 <!-- Carrito Icon -->
                 <button class="relative hover:text-yellow-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -47,12 +46,21 @@
             </div>
         </div>
     </header>
-    
+
+    <!-- Banner Section -->
+    <section class="relative w-full h-[50vh]">
+        <img src="img/smartwatch_banner.jpg" alt="Smartwatch Banner" class="absolute w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div class="text-center text-white">
+                <h1 class="text-4xl font-bold mb-4">Bienvenido a JSW Tienda</h1>
+                <p class="text-lg mb-6">Encuentra los mejores gadgets y relojes inteligentes.</p>
+                <a href="#productos" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg text-lg font-semibold hover:bg-yellow-500 transition">Ver productos</a>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Content -->
-    <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-bold text-center mb-8">Productos</h1>
-
+    <div id="productos" class="container mx-auto py-8">
         <products-viewer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></products-viewer>
     </div>
 
