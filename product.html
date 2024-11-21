@@ -84,7 +84,7 @@
                 <div class="w-full md:w-1/2">
                     <img class="image w-full h-64 object-cover rounded-lg" alt="Imagen del producto" />
                 </div>
-
+    
                 <!-- Detalles del producto -->
                 <div class="w-full md:w-1/2">
                     <h3 class="name text-2xl font-bold mb-4">Cargando producto...</h3>
@@ -100,16 +100,25 @@
                             <!-- Las características se renderizan dinámicamente aquí -->
                         </ul>
                     </div>
-
+    
                     <hr class="my-4">
-                    <a href="index.html"
-                        class="inline-block bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-blue-900 transition">
-                        Volver a la tienda
-                    </a>
+                    <!-- Botones -->
+                    <div class="flex space-x-4">
+                        <!-- Botón Turn back -->
+                        <a href="index.html" class="inline-block bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-blue-900 transition">
+                            Turn back
+                        </a>
+                        <!-- Botón Add to cart -->
+                        <button id="add-to-cart-button"
+                            class="add-to-cart bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition">
+                            Add to cart
+                        </button>
+                    </div>
                 </div>
             </div>
         </custom-product>
     </div>
+    
 
     <script src="main.js"></script>
 </body>
