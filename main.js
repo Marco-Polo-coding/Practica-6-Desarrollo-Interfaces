@@ -63,7 +63,7 @@ const keyMappings = {
           // Hacer clic en el producto redirige a la página de detalles
           productContent.querySelector(".product").addEventListener("click", (e) => {
               // Evitar que el clic en el botón "Añadir al carrito" redirija
-              if (e.target.classList.contains("add-to-cart")) {
+              if (e.target.classList.contains("add-to-cart")|| e.target.classList.contains("specs-btn")) {
                   e.stopPropagation();
                   return;
               }
