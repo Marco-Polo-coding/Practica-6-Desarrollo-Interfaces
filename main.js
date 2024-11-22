@@ -41,15 +41,6 @@ class ProductsViewer extends HTMLElement {
     products.forEach((product) => {
       // Clonar el contenido de la plantilla
       const productContent = document.importNode(template.content, true);
-      productContent.querySelector("#speces-btn").style = "anchor-name: --anchor-specs-" + product.id;
-      // #speces-menu position-anchor: --anchor-specs-" + product.id;
-      // #speces-menu position-area
-      productContent.querySelector("#speces-menu").style = `
-        position-anchor: --anchor-specs-${product.id};
-        position-area: span-top right;
-        margin: 0;
-      `
-      productContent.querySelector().style = ``
 
       // Asignar datos al producto
       productContent.querySelector(".name").textContent = product.name;
