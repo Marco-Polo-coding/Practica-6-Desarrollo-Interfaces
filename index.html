@@ -32,10 +32,9 @@
             anchor-name: --anchor-persona;
         }
 
-        /* Anchor del menú Specs */
-        #specs-btn {
+        /* #specs-btn {
             anchor-name: --anchor-specs;
-        }
+        } */
 
 
         /* Cuando el popover está abierto */
@@ -100,27 +99,18 @@
             /* Texto del color del fondo del header */
         }
 
-        #specs-menu {
+        /* #specs-menu {
             position: absolute;
             position-anchor: --anchor-specs;
-            /* Asegura que se posicione en relación con el contenedor */
             top: anchor(--anchor-specs bottom);
-            /* Debajo del botón */
             left: anchor(--anchor-specs center);
-            /* Centrado horizontalmente */
             transform: translateX(-50%);
-            /* Alinea el centro del popover */
             background: white;
-            /* Fondo blanco para mejor visibilidad */
             border: 1px solid #ccc;
             border-radius: 0.5rem;
             padding: 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-        }
-
-        /* #specs-menu {
-            display: block;
         } */
 
 
@@ -222,13 +212,13 @@
                         Add to cart
                     </button>
                     <!-- Botón Ver características -->
-                    <button id="specs-btn-{id}"
+                    <button id="speces-btn"
                         class="specs-btn bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                        popovertarget="specs-menu-{id}" anchor-name="--anchor-specs-{id}">
+                        popovertarget="speces-menu">
                         Specs
                     </button>
 
-                    <div id="specs-menu-{id}" popover anchor="specs-btn-{id}">
+                    <div id="speces-menu" popover>
                         <p class="text-gray-500 text-center">Empty menu</p>
                     </div>
 
