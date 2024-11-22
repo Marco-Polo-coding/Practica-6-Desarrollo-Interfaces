@@ -156,7 +156,7 @@
                         </li>
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
                             <a href="#contact-form" class="contact-link">Contacto</a>
-                        </li>                        
+                        </li>
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
                             <a href="#">About Us</a>
                         </li>
@@ -202,16 +202,34 @@
             </button>
             <div id="order-menu" popover anchor="order-btn">
                 <ul class="text-gray-700">
-                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Por Precio</li>
-                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Por Rating</li>
+                    <!-- Submenú Por Precio -->
+                    <li id="order-by-price" class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer relative" popovertarget="order-price-menu">
+                        Por Precio
+                        <div id="order-price-menu" popover anchor="order-by-price">
+                            <ul>
+                                <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Ascendente</li>
+                                <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Descendente</li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- Submenú Por Rating -->
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer relative">
+                        Por Rating
+                        <div class="hidden absolute left-full top-0 bg-white shadow-md rounded-lg mt-0 w-36 p-2 z-10">
+                            <ul>
+                                <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Ascendente</li>
+                                <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Descendente</li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
             </div>
-    
+        
             <!-- Botón Filtrar -->
             <button id="filter-btn" class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition" popovertarget="filter-menu">
                 Filtrar
             </button>
-            <div id="filter-menu" popover anchor="filter-btn">  
+            <div id="filter-menu" popover anchor="filter-btn">
                 <ul class="text-gray-700">
                     <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Categoría</li>
                     <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Marca</li>
@@ -219,11 +237,12 @@
                 </ul>
             </div>
         </div>
-    
+        
+
         <!-- Grid de productos -->
         <products-viewer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></products-viewer>
     </div>
-    
+
 
     <!-- Plantilla para productos -->
     <template id="product-template">
