@@ -819,3 +819,27 @@ document.addEventListener("DOMContentLoaded", () => {
   // Renderizar el carrito al cargar la página
   renderCart();
 });
+
+document.querySelector('.contact-link').addEventListener('click', function (event) {
+  event.preventDefault(); // Evitar comportamiento predeterminado del enlace
+  const contactForm = document.getElementById('contact-form');
+  contactForm.classList.remove('hidden'); // Mostrar el formulario
+  contactForm.scrollIntoView({ behavior: 'smooth' }); // Hacer scroll hacia el formulario
+});
+
+
+    document.querySelector('#persona-menu ul li a[href="contact.html"]').addEventListener('click', function (event) {
+        event.preventDefault(); // Evitar que el enlace navegue a otra página
+
+        // Ir al inicio de la página
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // Mostrar el formulario de contacto después del desplazamiento al inicio
+        setTimeout(() => {
+            const contactForm = document.getElementById('contact-form');
+            contactForm.classList.remove('hidden'); // Mostrar el formulario
+            contactForm.scrollIntoView({ behavior: 'smooth' }); // Desplazar suavemente al formulario
+        }, 500); // Esperar medio segundo antes de mostrar el formulario
+    });
+
+

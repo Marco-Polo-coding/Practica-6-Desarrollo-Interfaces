@@ -6,6 +6,103 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalles del Producto</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Anchor del menú Persona */
+        #persona-btn {
+            anchor-name: --anchor-persona;
+        }
+
+        /* #specs-btn {
+            anchor-name: --anchor-specs;
+        } */
+
+
+        /* Cuando el popover está abierto */
+        /* :popover-open {
+            display: block;
+        } */
+
+        /* Posición y diseño del popover de persona-menu */
+        #persona-menu {
+            inset: unset;
+            top: anchor(--anchor-persona bottom);
+            left: anchor(--anchor-persona left);
+            translate: -50%;
+            margin-top: 15px;
+            background: #1a202c;
+            /* Color del fondo del header */
+            border: none;
+            /* Sin bordes */
+            border-radius: 0.5rem;
+            padding: 15px;
+            /* Ajuste de padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            /* Sombra más sutil */
+            z-index: 1000;
+        }
+
+        /* Estilo para la lista dentro del popover */
+        #persona-menu ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #persona-menu ul li {
+            padding: 0.5rem 1rem;
+            /* Espaciado interno */
+            font-size: 1rem;
+            /* Tamaño del texto */
+            font-weight: 500;
+            /* Peso medio */
+            transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+            /* Transición suave */
+        }
+
+        /* Estilo de los enlaces */
+        #persona-menu ul li a {
+            text-decoration: none;
+            /* Sin subrayado */
+            color: white;
+            /* Texto blanco */
+            display: block;
+        }
+
+        /* Hover sobre los elementos del menú */
+        #persona-menu ul li:hover {
+            background: #facc15;
+            /* Fondo amarillo */
+        }
+
+        #persona-menu ul li:hover a {
+            color: #1a202c;
+            /* Texto del color del fondo del header */
+        }
+
+        /* #specs-menu {
+            position: absolute;
+            position-anchor: --anchor-specs;
+            top: anchor(--anchor-specs bottom);
+            left: anchor(--anchor-specs center);
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        } */
+
+
+        /* Botones de popovertarget */
+        button[popovertarget] {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen">
@@ -16,13 +113,13 @@
             <!-- Logo -->
             <a href="index.html" class="flex items-center space-x-2 cursor-pointer">
                 <div class="bg-yellow-400 text-gray-900 font-bold text-xl p-2 rounded-full">JSW</div>
-                <span class="text-lg font-semibold">Tienda</span>
             </a>
 
             <!-- Icons -->
             <div class="flex items-center space-x-4">
                 <!-- Persona Icon -->
-                <button class="hover:text-yellow-400 relative" popovertarget="persona-menu" aria-haspopup="menu" anchor>
+                <button id="persona-btn" class="hover:text-yellow-400 relative" popovertarget="persona-menu"
+                    anchor-name="--anchor-persona">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -31,31 +128,21 @@
                 </button>
 
                 <!-- Menú desplegable -->
-                <div popover id="persona-menu"
-                    class="hidden absolute bg-white border border-gray-300 shadow-lg rounded-lg p-4 w-40 right-0">
+                <div id="persona-menu" popover anchor="persona-btn">
                     <ul class="text-gray-700">
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
                             <a href="index.html">Inicio</a>
                         </li>
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
-                            <a href="contact.html">Contacto</a>
+                            <a href="#contact-form" class="contact-link">Contacto</a>
                         </li>
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
-                            <a href="about.html">About Us</a>
+                            <a href="#">About Us</a>
                         </li>
                     </ul>
                 </div>
 
-
                 <!-- Search Icon -->
-                <!-- <button class="hover:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round">
-                        </line>
-                    </svg>
-                </button> -->
                 <product-search></product-search>
 
 
@@ -72,7 +159,6 @@
             </div>
         </div>
     </header>
-
 
 
 
@@ -103,27 +189,53 @@
 
                     <hr class="my-4">
                     <!-- Botones -->
-                    <div class="flex space-x-4">
-                        <!-- Botón Turn back -->
-                        <a href="index.html"
-                            class="inline-block bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-blue-900 transition">
-                            Turn back
-                        </a>
+                    <!-- Botones -->
+                    <div class="flex justify-start">
                         <!-- Botón Add to cart -->
                         <button id="add-to-cart-button"
                             class="add-to-cart bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition">
                             Add to cart
                         </button>
                     </div>
+
                 </div>
             </div>
         </custom-product>
     </div>
 
+    <!-- Formulario de contacto -->
+    <div id="contact-form" class="hidden bg-gray-100 p-6 shadow-lg rounded-lg max-w-lg mx-auto my-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">Contáctanos</h2>
+        <form>
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 font-bold mb-2">Nombre</label>
+                <input type="text" id="name" name="name"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    required>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
+                <input type="email" id="email" name="email"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    required>
+            </div>
+            <div class="mb-4">
+                <label for="message" class="block text-gray-700 font-bold mb-2">Mensaje</label>
+                <textarea id="message" name="message" rows="4"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    required></textarea>
+            </div>
+            <button type="submit"
+                class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition w-full">
+                Enviar
+            </button>
+        </form>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-4">
         <div class="container mx-auto text-center">
-            &copy; 2024 JSW Tienda. Todos los derechos reservados.
+            &copy; 2024 JSW Store. Todos los derechos reservados.
         </div>
     </footer>
 

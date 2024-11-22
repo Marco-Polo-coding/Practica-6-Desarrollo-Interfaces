@@ -7,6 +7,10 @@
     <title>Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         @keyframes fadeIn {
             0% {
                 opacity: 0;
@@ -129,7 +133,7 @@
             <!-- Logo -->
             <a href="index.html" class="flex items-center space-x-2 cursor-pointer">
                 <div class="bg-yellow-400 text-gray-900 font-bold text-xl p-2 rounded-full">JSW</div>
-                <span class="text-lg font-semibold">Tienda</span>
+                <!-- <span class="text-lg font-semibold">Tienda</span> -->
             </a>
 
             <!-- Icons -->
@@ -151,10 +155,10 @@
                             <a href="index.html">Inicio</a>
                         </li>
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
-                            <a href="contact.html">Contacto</a>
-                        </li>
+                            <a href="#contact-form" class="contact-link">Contacto</a>
+                        </li>                        
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
-                            <a href="about.html">About Us</a>
+                            <a href="#">About Us</a>
                         </li>
                     </ul>
                 </div>
@@ -182,17 +186,44 @@
         <img src="img/smartwatch_banner.jpg" alt="Smartwatch Banner" class="absolute w-full h-full object-cover">
         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <div class="text-center text-white">
-                <h1 class="text-4xl font-bold mb-4 fade-in">Bienvenido a JSW Tienda</h1>
+                <h1 class="text-4xl font-bold mb-4 fade-in">Bienvenido a JSW Store</h1>
                 <p class="text-lg mb-6 fade-in-delayed">Encuentra los mejores gadgets y relojes inteligentes.</p>
-                <!-- <a href="#productos" class="bg-yellow-400 text-gray-900 px-6 py-2 rounded-lg text-lg font-semibold hover:bg-yellow-500 transition fade-in-delayed">Ver productos</a> -->
             </div>
         </div>
     </section>
 
     <!-- Main Content -->
     <div id="productos" class="container mx-auto py-8">
+        <!-- Botones con submenús -->
+        <div class="flex justify-between items-center mb-6 relative">
+            <!-- Botón Ordenar -->
+            <button id="order-btn" class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition" popovertarget="order-menu">
+                Ordenar
+            </button>
+            <div id="order-menu" popover anchor="order-btn">
+                <ul class="text-gray-700">
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Por Precio</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Por Rating</li>
+                </ul>
+            </div>
+    
+            <!-- Botón Filtrar -->
+            <button id="filter-btn" class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition" popovertarget="filter-menu">
+                Filtrar
+            </button>
+            <div id="filter-menu" popover anchor="filter-btn">  
+                <ul class="text-gray-700">
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Categoría</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Marca</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Disponibilidad</li>
+                </ul>
+            </div>
+        </div>
+    
+        <!-- Grid de productos -->
         <products-viewer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></products-viewer>
     </div>
+    
 
     <!-- Plantilla para productos -->
     <template id="product-template">
@@ -205,34 +236,52 @@
                 <!-- Contenedor para las tags -->
                 <div class="tags flex flex-wrap justify-center space-x-2 mb-4"></div>
                 <!-- Contenedor para los botones -->
-                <div class="flex space-x-2 justify-center">
+                <div class="flex justify-center">
                     <!-- Botón Añadir al carrito -->
                     <button
-                        class="add-to-cart bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-yellow-400 transition">
+                        class="add-to-cart bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-yellow-400 transition">
                         Add to cart
                     </button>
-                    <!-- Botón Ver características -->
-                    <button id="speces-btn"
-                        class="specs-btn bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                        popovertarget="speces-menu">
-                        Specs
-                    </button>
-
-                    <div id="speces-menu" popover>
-                        <p class="text-gray-500 text-center">Empty menu</p>
-                    </div>
-
-
-
                 </div>
+
             </div>
         </div>
     </template>
 
+    <!-- Formulario de contacto -->
+    <div id="contact-form" class="hidden bg-gray-100 p-6 shadow-lg rounded-lg max-w-lg mx-auto my-8">
+        <h2 class="text-2xl font-bold mb-4 text-center">Contáctanos</h2>
+        <form>
+            <div class="mb-4">
+                <label for="name" class="block text-gray-700 font-bold mb-2">Nombre</label>
+                <input type="text" id="name" name="name"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    required>
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700 font-bold mb-2">Email</label>
+                <input type="email" id="email" name="email"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    required>
+            </div>
+            <div class="mb-4">
+                <label for="message" class="block text-gray-700 font-bold mb-2">Mensaje</label>
+                <textarea id="message" name="message" rows="4"
+                    class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                    required></textarea>
+            </div>
+            <button type="submit"
+                class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition w-full">
+                Enviar
+            </button>
+        </form>
+    </div>
+
+
     <!-- Footer -->
     <footer class="bg-gray-900 text-white py-4">
         <div class="container mx-auto text-center">
-            &copy; 2024 JSW Tienda. Todos los derechos reservados.
+            &copy; 2024 JSW Store. Todos los derechos reservados.
         </div>
     </footer>
 
