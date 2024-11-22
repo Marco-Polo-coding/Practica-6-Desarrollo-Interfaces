@@ -36,57 +36,93 @@
         #specs-btn {
             anchor-name: --anchor-specs;
         }
-        
-        
-        /* Estilo general para popovers */
-        [popover] {
-            /* display: none; */
-            /* Por defecto, ocultos */
-            /* position: absolute; */
-            /* background: white; */
-            /* border: 1px solid #ccc;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            list-style: none; */
-        }
-        
+
+
         /* Cuando el popover está abierto */
-        :popover-open {
+        /* :popover-open {
             display: block;
-        }
-        
-        /* Posición del menú de Persona */
-        /* Estilo para el popover del menú de Persona */
+        } */
+
+        /* Posición y diseño del popover de persona-menu */
         #persona-menu {
             inset: unset;
-            /* position-anchor: --anchor-persona; */
             top: anchor(--anchor-persona bottom);
             left: anchor(--anchor-persona left);
             translate: -50%;
             margin-top: 15px;
-            background: white;
-            border: 1px solid #ccc;
+            background: #1a202c;
+            /* Color del fondo del header */
+            border: none;
+            /* Sin bordes */
             border-radius: 0.5rem;
-            padding: 1rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            /* Ajuste de padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            /* Sombra más sutil */
             z-index: 1000;
         }
-        
-        /* Posición del menú de Specs */
+
+        /* Estilo para la lista dentro del popover */
+        #persona-menu ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #persona-menu ul li {
+            padding: 0.5rem 1rem;
+            /* Espaciado interno */
+            font-size: 1rem;
+            /* Tamaño del texto */
+            font-weight: 500;
+            /* Peso medio */
+            transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+            /* Transición suave */
+        }
+
+        /* Estilo de los enlaces */
+        #persona-menu ul li a {
+            text-decoration: none;
+            /* Sin subrayado */
+            color: white;
+            /* Texto blanco */
+            display: block;
+        }
+
+        /* Hover sobre los elementos del menú */
+        #persona-menu ul li:hover {
+            background: #facc15;
+            /* Fondo amarillo */
+        }
+
+        #persona-menu ul li:hover a {
+            color: #1a202c;
+            /* Texto del color del fondo del header */
+        }
+
         #specs-menu {
+            position: absolute;
             position-anchor: --anchor-specs;
-            top: 0;
-            left: 0;
+            /* Asegura que se posicione en relación con el contenedor */
+            top: anchor(--anchor-specs bottom);
+            /* Debajo del botón */
+            left: anchor(--anchor-specs center);
+            /* Centrado horizontalmente */
+            transform: translateX(-50%);
+            /* Alinea el centro del popover */
             background: white;
+            /* Fondo blanco para mejor visibilidad */
             border: 1px solid #ccc;
             border-radius: 0.5rem;
             padding: 1rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             z-index: 1000;
-            /* Aparece debajo del botón */
         }
+
+        /* #specs-menu {
+            display: block;
+        } */
+
 
         /* Botones de popovertarget */
         button[popovertarget] {
@@ -186,13 +222,13 @@
                         Add to cart
                     </button>
                     <!-- Botón Ver características -->
-                    <button id="specs-btn"
+                    <button id="specs-btn-{id}"
                         class="specs-btn bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                        popovertarget="specs-menu" anchor-name="--anchor-specs">
+                        popovertarget="specs-menu-{id}" anchor-name="--anchor-specs-{id}">
                         Specs
                     </button>
 
-                    <div id="specs-menu" popover>
+                    <div id="specs-menu-{id}" popover anchor="specs-btn-{id}">
                         <p class="text-gray-500 text-center">Empty menu</p>
                     </div>
 
@@ -203,7 +239,12 @@
         </div>
     </template>
 
-
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-4">
+        <div class="container mx-auto text-center">
+            &copy; 2024 JSW Tienda. Todos los derechos reservados.
+        </div>
+    </footer>
 
     <script src="main.js"></script>
 </body>

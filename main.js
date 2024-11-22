@@ -77,6 +77,7 @@ class ProductsViewer extends HTMLElement {
           window.location.href = `product.html?id=${product.id}`;
         });
 
+        
       // Añadir el producto al componente
       this.appendChild(productContent);
     });
