@@ -26,6 +26,72 @@
         .fade-in-delayed {
             animation: fadeIn 1.5s ease-in-out;
         }
+
+        /* Anchor del menú Persona */
+        #persona-btn {
+            anchor-name: --anchor-persona;
+        }
+
+        /* Anchor del menú Specs */
+        #specs-btn {
+            anchor-name: --anchor-specs;
+        }
+        
+        
+        /* Estilo general para popovers */
+        [popover] {
+            /* display: none; */
+            /* Por defecto, ocultos */
+            /* position: absolute; */
+            /* background: white; */
+            /* border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            list-style: none; */
+        }
+        
+        /* Cuando el popover está abierto */
+        :popover-open {
+            display: block;
+        }
+        
+        /* Posición del menú de Persona */
+        /* Estilo para el popover del menú de Persona */
+        #persona-menu {
+            inset: unset;
+            /* position-anchor: --anchor-persona; */
+            top: anchor(--anchor-persona bottom);
+            left: anchor(--anchor-persona left);
+            translate: -50%;
+            margin-top: 15px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        
+        /* Posición del menú de Specs */
+        #specs-menu {
+            position-anchor: --anchor-specs;
+            top: 0;
+            left: 0;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            /* Aparece debajo del botón */
+        }
+
+        /* Botones de popovertarget */
+        button[popovertarget] {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -43,7 +109,8 @@
             <!-- Icons -->
             <div class="flex items-center space-x-4">
                 <!-- Persona Icon -->
-                <button class="hover:text-yellow-400 relative" popovertarget="persona-menu" aria-haspopup="menu" anchor>
+                <button id="persona-btn" class="hover:text-yellow-400 relative" popovertarget="persona-menu"
+                    anchor-name="--anchor-persona">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -52,8 +119,7 @@
                 </button>
 
                 <!-- Menú desplegable -->
-                <div popover id="persona-menu"
-                    class="hidden absolute bg-white border border-gray-300 shadow-lg rounded-lg p-4 w-40 right-0">
+                <div id="persona-menu" popover anchor="persona-btn">
                     <ul class="text-gray-700">
                         <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
                             <a href="index.html">Inicio</a>
@@ -67,16 +133,7 @@
                     </ul>
                 </div>
 
-
                 <!-- Search Icon -->
-                <!-- <button class="hover:text-yellow-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8" stroke-linecap="round" stroke-linejoin="round"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65" stroke-linecap="round" stroke-linejoin="round">
-                        </line>
-                    </svg>
-                </button> -->
                 <product-search></product-search>
 
 
@@ -89,7 +146,7 @@
                     </svg>
                     <span class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2">0</span>
                 </a>
-                
+
             </div>
         </div>
     </header>
@@ -129,14 +186,16 @@
                         Add to cart
                     </button>
                     <!-- Botón Ver características -->
-                    <button class="specs-btn bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-                        popovertarget="empty-menu" aria-haspopup="menu" anchor>
+                    <button id="specs-btn"
+                        class="specs-btn bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                        popovertarget="specs-menu" anchor-name="--anchor-specs">
                         Specs
                     </button>
-                    <div popover id="empty-menu"
-                        class="hidden absolute bg-white border border-gray-300 shadow-lg rounded-lg p-4 w-64">
+
+                    <div id="specs-menu" popover>
                         <p class="text-gray-500 text-center">Empty menu</p>
                     </div>
+
 
 
                 </div>
