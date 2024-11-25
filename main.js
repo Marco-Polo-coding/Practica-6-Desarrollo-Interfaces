@@ -26,16 +26,10 @@ function addToCart(product) {
   if (existingIndex > -1) {
     cart[existingIndex].quantity += 1;
   } else {
+    console.log("Producto añadido al carrito:", product); // Verificar datos
     cart.push(product);
-    // Verificar que el producto tiene un nombre y un precio válido
-    // if (typeof product.price === "number" && product.price > 0) {
-    //   cart.push(product);
-    // } else {
-    //   console.error("Producto inválido:", product);
-    //   console.error("Nombre:", product.name);
-    //   console.error("Precio:", product.price);
-    //   return;
-    // }
+    console.log(localStorage.getItem("cart"));
+    console.log(cart);
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -78,7 +72,7 @@ class ProductsViewer extends HTMLElement {
       const productContent = document.importNode(template.content, true);
 
       // Asignar datos al producto
-      productContent.querySelector(".name").textContent = product.name;
+      productContent.querySelector(".name").textContent = product.title;
       productContent.querySelector(".price").textContent = `${product.price}`;
       productContent.querySelector(".image").src = product.image;
       productContent
@@ -104,12 +98,12 @@ class ProductsViewer extends HTMLElement {
           e.stopPropagation();
           const productToAdd = {
             id: product.id,
-            name: product.name,
-            price: product.price,
+            title: product.title,
+            price: parseFloat(product.price),
             image: product.image,
             quantity: 1,
           };
-          console.log("Producto añadido al carrito:", productToAdd);
+          console.log("Datos del producto a agregar:", productToAdd); // Verificar datos
           addToCart(productToAdd);
           alert("Producto añadido al carrito");
         });
@@ -159,7 +153,7 @@ class CustomProduct extends HTMLElement {
       this.innerHTML = `<p>Producto no encontrado.</p>`;
       return;
     } else {
-      this.querySelector(".name").textContent = product.name;
+      this.querySelector(".name").textContent = product.title;
       this.querySelector(".image").src = product.image;
       this.querySelector(".price").textContent = `${product.price}`;
       this.querySelector(".description").textContent = product.description;
@@ -207,17 +201,17 @@ class CustomProduct extends HTMLElement {
       this.appendChild(featuresContainer);
     }
 
-    this.querySelector(".name").textContent = product.name;
+    this.querySelector(".name").textContent = product.title;
     this.querySelector(".image").src = product.image;
     this.querySelector(".price").textContent = `${product.price}`;
     this.querySelector(".description").textContent = product.description;
 
     // Manejar el evento "Add to cart"
-    this.querySelector("#add-to-cart-button").addEventListener("click", () => {
+    this.querySelector(".add-to-cart").addEventListener("click", () => {
       const productToAdd = {
         id: product.id,
-        name: product.name,
-        price: product.price,
+        title: product.title,
+        price: parseFloat(product.price),
         image: product.image,
         quantity: 1,
       };
@@ -237,6 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderCart() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    console.log("Datos actuales del carrito:", cart); // Verificar el contenido del carrito
     cartItemsContainer.innerHTML = "";
     let total = 0;
 
@@ -245,11 +240,14 @@ document.addEventListener("DOMContentLoaded", () => {
         <p class="text-center text-gray-500">
           Tu carrito está vacío. <a href="index.html" class="text-yellow-400 underline">Ir a la tienda</a>
         </p>`;
-      cartTotalElement.textContent = "€0.00";
+      cartTotalElement.textContent = "0.00€";
       return;
     }
 
     cart.forEach((item) => {
+      // Asegúrate de que los valores sean números válidos
+      const price = parseFloat(item.price || 0);
+      const quantity = parseInt(item.quantity || 0);
       const itemTotal = item.price * item.quantity;
       total += itemTotal;
 
@@ -260,35 +258,45 @@ document.addEventListener("DOMContentLoaded", () => {
       cartItem.innerHTML = `
         <div class="flex items-center">
           <img src="${item.image}" alt="${
-        item.name || "Producto"
+        item.title || "Producto"
       }" class="w-16 h-16 rounded-lg object-cover">
           <div class="ml-4">
-            <h2 class="font-semibold">${item.name || "Producto sin nombre"}</h2>
+            <h2 class="font-semibold">${item.title || "Producto sin nombre"}</h2>
             <p class="text-sm text-gray-500">Cantidad: ${item.quantity}</p>
           </div>
         </div>
         <div class="text-right">
-          <p class="font-semibold text-lg">€${itemTotal.toFixed(2)}</p>
-          <button data-id="${
-            item.id
-          }" class="text-red-500 hover:underline remove-item">Eliminar</button>
+          <p class="font-semibold text-lg">${item.price}</p>
+          <button data-id="${item.id}" id="remove-items" class="remove-item text-red-500 hover:underline">Eliminar</button>
         </div>`;
       cartItemsContainer.appendChild(cartItem);
     });
 
-    cartTotalElement.textContent = `€${total.toFixed(2)}`;
+    cartTotalElement.textContent = `${total}€`;
   }
 
-  cartItemsContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-item")) {
-      const id = e.target.dataset.id;
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+// Delegación de eventos para el botón "Eliminar"
+cartItemsContainer.addEventListener("click", (e) => {
+  if (e.target.classList.contains("remove-item")) {
+    const id = e.target.dataset.id; // ID del producto a eliminar
+    console.log("ID del producto:", id); // Verificar si el ID se obtiene correctamente
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+      // Filtrar el carrito excluyendo el producto
       cart = cart.filter((item) => item.id !== id);
-      localStorage.setItem("cart", JSON.stringify(cart));
-      renderCart();
-      updateCartCounter(); // Asegúrate de actualizar el contador al eliminar
-    }
-  });
+
+      if (cart.length === 0) {
+          // Si el carrito está vacío, eliminarlo completamente
+          localStorage.removeItem("cart");
+      } else {
+          // Guardar cambios en localStorage
+          localStorage.setItem("cart", JSON.stringify(cart));
+      }
+
+      renderCart(); // Actualizar el renderizado del carrito
+      updateCartCounter(); // Actualizar el contador del carrito
+  }
+});
 
   checkoutButton.addEventListener("click", () => {
     alert("¡Gracias por tu compra!");
@@ -488,7 +496,7 @@ class ProductSearch extends HTMLElement {
     }
 
     const filteredProducts = this.allProducts.filter((product) => {
-      const name = product.name?.toLowerCase() || "";
+      const name = product.title?.toLowerCase() || "";
       const description = product.short_description?.toLowerCase() || "";
       const tags = product.tags
         ? product.tags.map((tag) => tag?.toLowerCase()).join(" ")
@@ -524,14 +532,14 @@ class ProductSearch extends HTMLElement {
 
       const img = document.createElement("img");
       img.src = product.image;
-      img.alt = product.name;
+      img.alt = product.title;
 
       const info = document.createElement("div");
       info.className = "product-info";
 
       const name = document.createElement("p");
       name.className = "product-name";
-      name.textContent = product.name;
+      name.textContent = product.title;
 
       const price = document.createElement("p");
       price.className = "product-price";
@@ -742,9 +750,9 @@ class ShoppingCart extends HTMLElement {
       cartItem.className = "cart-item";
 
       cartItem.innerHTML = `
-        <img src="${item.image}" alt="${item.name}" />
+        <img src="${item.image}" alt="${item.title}" />
         <div class="cart-item-details">
-          <p>${item.name}</p>
+          <p>${item.title}</p>
           <p>Cantidad: ${item.quantity}</p>
         </div>
         <p>${item.price} €</p>
@@ -772,136 +780,6 @@ class ShoppingCart extends HTMLElement {
 
 // Define el elemento personalizado
 customElements.define("shopping-cart", ShoppingCart);
-
-// Añadir funcionalidad al botón "Add to cart"
-document.addEventListener("DOMContentLoaded", () => {
-  const cartElement = document.querySelector("shopping-cart");
-
-  document.querySelectorAll(".add-to-cart").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      const productCard = event.target.closest(".product");
-      const product = {
-        id: productCard.dataset.id,
-        name: productCard.querySelector(".name").textContent,
-        price: parseFloat(
-          productCard.querySelector(".price").textContent.replace("€", "")
-        ),
-        image: productCard.querySelector(".image").src,
-      };
-
-      cartElement.addToCart(product);
-    });
-  });
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.addEventListener("click", (event) => {
-    if (event.target.classList.contains("add-to-cart")) {
-      const productCard = event.target.closest(".product");
-
-      if (!productCard) return;
-
-      const product = {
-        id: productCard.dataset.id,
-        name: productCard.querySelector(".name").textContent,
-        price: parseFloat(productCard.querySelector(".price").textContent.replace("€", "")),
-        image: productCard.querySelector(".image").src,
-        quantity: 1,
-      };
-
-      // Manejo de carrito en localStorage
-      let cart = JSON.parse(localStorage.getItem("cart")) || [];
-      const existingIndex = cart.findIndex((item) => item.id === product.id);
-
-      if (existingIndex > -1) {
-        cart[existingIndex].quantity += 1;
-      } else {
-        cart.push(product);
-      }
-
-      localStorage.setItem("cart", JSON.stringify(cart));
-      updateCartCounter();
-    }
-  });
-
-  // Función para actualizar el contador del carrito
-  function updateCartCounter() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    const counterElement = document.querySelector(".cart-counter");
-
-    if (counterElement) {
-      counterElement.textContent = totalItems;
-    }
-  }
-
-  updateCartCounter();
-});
-
-// Renderizar el carrito en la página de carrito
-document.addEventListener("DOMContentLoaded", () => {
-  const cartItemsContainer = document.getElementById("cart-items");
-  const cartTotalElement = document.getElementById("cart-total");
-  const checkoutButton = document.getElementById("checkout-button");
-
-  function renderCart() {
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    cartItemsContainer.innerHTML = "";
-    let total = 0;
-
-    if (cart.length === 0) {
-      cartItemsContainer.innerHTML = `
-        <p class="text-center text-gray-500">
-          Tu carrito está vacío. <a href="index.html" class="text-yellow-400 underline">Ir a la tienda</a>
-        </p>`;
-      cartTotalElement.textContent = "€0.00";
-      return;
-    }
-
-    cart.forEach((item) => {
-      const itemTotal = item.price * item.quantity;
-      total += itemTotal;
-
-      const cartItem = document.createElement("div");
-      cartItem.className = "flex justify-between items-center border-b border-gray-300 pb-4";
-
-      cartItem.innerHTML = `
-        <div class="flex items-center">
-          <img src="${item.image}" alt="${item.name}" class="w-16 h-16 rounded-lg object-cover">
-          <div class="ml-4">
-            <h2 class="font-semibold">${item.name}</h2>
-            <p class="text-sm text-gray-500">Cantidad: ${item.quantity}</p>
-          </div>
-        </div>
-        <div class="text-right">
-          <p class="font-semibold text-lg">€${itemTotal.toFixed(2)}</p>
-          <button data-id="${item.id}" class="text-red-500 hover:underline remove-item">Eliminar</button>
-        </div>`;
-
-      cartItemsContainer.appendChild(cartItem);
-    });
-
-    cartTotalElement.textContent = `€${total.toFixed(2)}`;
-  }
-
-  // cartItemsContainer.addEventListener("click", (e) => {
-  //   if (e.target.classList.contains("remove-item")) {
-  //     const id = e.target.dataset.id;
-  //     let cart = JSON.parse(localStorage.getItem("cart")) || [];
-  //     cart = cart.filter((item) => item.id !== id);
-  //     localStorage.setItem("cart", JSON.stringify(cart));
-  //     renderCart();
-  //   }
-  // });
-
-  // checkoutButton.addEventListener("click", () => {
-  //   // alert("¡Gracias por tu compra!");
-  //   localStorage.removeItem("cart");
-  //   renderCart();
-  // });
-
-  renderCart();
-});
 
 document.addEventListener("DOMContentLoaded", function () {
   // Enlace al formulario de contacto

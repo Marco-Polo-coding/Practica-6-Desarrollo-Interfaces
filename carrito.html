@@ -6,6 +6,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito de Compras</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+                /* Anchor del menú Persona */
+                #persona-btn {
+            anchor-name: --anchor-persona;
+        }
+
+        /* Posición y diseño del popover de persona-menu */
+        #persona-menu {
+            inset: unset;
+            top: anchor(--anchor-persona bottom);
+            left: anchor(--anchor-persona left);
+            translate: -50%;
+            margin-top: 15px;
+            background: #1a202c;
+            /* Color del fondo del header */
+            border: none;
+            /* Sin bordes */
+            border-radius: 0.5rem;
+            padding: 15px;
+            /* Ajuste de padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            /* Sombra más sutil */
+            z-index: 1000;
+        }
+
+        /* Estilo para la lista dentro del popover */
+        #persona-menu ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        #persona-menu ul li {
+            padding: 0.5rem 1rem;
+            /* Espaciado interno */
+            font-size: 1rem;
+            /* Tamaño del texto */
+            font-weight: 500;
+            /* Peso medio */
+            transition: background 0.2s ease-in-out, color 0.2s ease-in-out;
+            /* Transición suave */
+        }
+
+        /* Estilo de los enlaces */
+        #persona-menu ul li a {
+            text-decoration: none;
+            /* Sin subrayado */
+            color: white;
+            /* Texto blanco */
+            display: block;
+        }
+
+        /* Hover sobre los elementos del menú */
+        #persona-menu ul li:hover {
+            background: #facc15;
+            /* Fondo amarillo */
+        }
+
+        #persona-menu ul li:hover a {
+            color: #1a202c;
+            /* Texto del color del fondo del header */
+        }
+
+
+
+        /* Botones de popovertarget */
+        button[popovertarget] {
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
@@ -20,13 +90,29 @@
             <!-- Icons -->
             <div class="flex items-center space-x-4">
                 <!-- Persona Icon -->
-                <button class="hover:text-yellow-400">
+                <button id="persona-btn" class="hover:text-yellow-400 relative" popovertarget="persona-menu"
+                    anchor-name="--anchor-persona">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M5.121 17.804A6 6 0 1118.879 17.8M12 11a4 4 0 100-8 4 4 0 000 8z" />
                     </svg>
                 </button>
+
+                <!-- Menú desplegable -->
+                <div id="persona-menu" popover anchor="persona-btn">
+                    <ul class="text-gray-700">
+                        <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
+                            <a href="index.html">Inicio</a>
+                        </li>
+                        <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
+                            <a href="#contact-form" class="contact-link">Contacto</a>
+                        </li>
+                        <li class="py-1 hover:bg-gray-100 rounded-lg px-2">
+                            <a href="#">About Us</a>
+                        </li>
+                    </ul>
+                </div>
 
                 <!-- Carrito Icon -->
                 <a href="cart.html" class="relative hover:text-yellow-400">
