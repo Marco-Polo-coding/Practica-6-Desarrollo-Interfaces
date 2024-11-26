@@ -280,8 +280,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Delegación de eventos para el botón "Eliminar"
   cartItemsContainer.addEventListener("click", (e) => {
+
     if (e.target.classList.contains("remove-item")) {
-      const id = e.target.dataset.id; // ID del producto a eliminar
+      const id = parseInt(e.target.dataset.id); // ID del producto a eliminar
+      
       // console.log("ID del producto:", id); // Verificar si el ID se obtiene correctamente
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
