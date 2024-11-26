@@ -39,6 +39,7 @@ function addToCart(product) {
 class ProductsViewer extends HTMLElement {
   constructor() {
     super();
+    this.products = []; // Guardar los productos cargados
   }
 
   connectedCallback() {
@@ -115,7 +116,32 @@ class ProductsViewer extends HTMLElement {
 
       // Añadir el producto al componente
       this.appendChild(productContent);
+    });    
+  }
+
+  setupEventListeners() {
+    const orderPriceMenu = document.querySelector("#order-price-menu");
+    orderPriceMenu.addEventListener("click", (e) => {
+      const target = e.target;
+          // Verifica si el elemento clicado es un <li>
+    if (target.tagName === "LI") {
+      const order = target.getAttribute("data-order"); // Obtener el valor del atributo data-order
+      console.log(`Orden seleccionado: ${order}`); // Depuración: verifica el valor
+      this.sortProductsByPrice(order); // Llama a la función para ordenar
+    }
+      if (e.target.textContent === "Ascendente") {
+        this.sortProductsByPrice("asc");
+      } else if (e.target.textContent === "Descendente") {
+        this.sortProductsByPrice("desc");
+      }
     });
+  }
+
+  sortProductsByPrice(order) {
+    const sortedProducts = [...this.products].sort((a, b) => {
+      return order === "asc" ? a.price - b.price : b.price - a.price;
+    });
+    this.renderProducts(sortedProducts);
   }
 }
 
@@ -231,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderCart() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    console.log("Datos actuales del carrito:", cart); // Verificar el contenido del carrito
+    // console.log("Datos actuales del carrito:", cart); // Verificar el contenido del carrito
     cartItemsContainer.innerHTML = "";
     let total = 0;
 
@@ -267,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="text-right">
           <p class="font-semibold text-lg">${item.price}</p>
-          <button data-id="${item.id}" id="remove-items" class="remove-item text-red-500 hover:underline">Eliminar</button>
+          <button data-id="${item.id}" class="remove-item text-red-500 hover:underline">Eliminar</button>
         </div>`;
       cartItemsContainer.appendChild(cartItem);
     });
@@ -279,7 +305,7 @@ document.addEventListener("DOMContentLoaded", () => {
 cartItemsContainer.addEventListener("click", (e) => {
   if (e.target.classList.contains("remove-item")) {
     const id = e.target.dataset.id; // ID del producto a eliminar
-    console.log("ID del producto:", id); // Verificar si el ID se obtiene correctamente
+    // console.log("ID del producto:", id); // Verificar si el ID se obtiene correctamente
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
       // Filtrar el carrito excluyendo el producto

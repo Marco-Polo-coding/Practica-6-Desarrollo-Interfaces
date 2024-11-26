@@ -93,7 +93,160 @@
             /* Texto del color del fondo del header */
         }
 
+        #order-btn {
+            anchor-name: --order-menu;
+        }
 
+        #order-menu {
+            inset: unset;
+            top: anchor(--order-menu top);
+            left: anchor(--order-menu right);
+            margin-left: 3px;
+            background: #1a202c;
+            /* Color del fondo del header */
+            border: none;
+            /* Sin bordes */
+            border-radius: 0.5rem;
+            padding: 15px;
+            /* Ajuste de padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            /* Sombra más sutil */
+            z-index: 1000;
+        }
+
+        #order-menu ul button {
+            display: block;
+            width: 100%;
+            /* Opcional: para que ocupen todo el ancho */
+            text-align: left;
+            /* Opcional: para alinear el texto a la izquierda */
+            margin-bottom: 0.5rem;
+            /* Opcional: agrega un margen inferior entre botones */
+            color: white;
+        }
+
+        #order-menu ul button:hover {
+            background: #facc15;
+            /* Fondo amarillo */
+        }
+
+        #order-by-price {
+            anchor-name: --order-by-price;
+        }
+
+        #order-price-menu {
+            inset: unset;
+            top: anchor(--order-by-price top);
+            left: anchor(--order-by-price right);
+            /* translate: -50%; */
+            /* margin-top: 15px; */
+            translate: 0 -75%;
+            margin-left: 15.5px;
+            background: #1a202c;
+            /* Color del fondo del header */
+            border: none;
+            /* Sin bordes */
+            border-radius: 0.5rem;
+            padding: 15px;
+            /* Ajuste de padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            /* Sombra más sutil */
+            z-index: 1000;
+        }
+
+        #order-price-menu ul li {
+            display: block;
+            width: 100%;
+            /* Opcional: para que ocupen todo el ancho */
+            text-align: left;
+            /* Opcional: para alinear el texto a la izquierda */
+            margin-bottom: 0.5rem;
+            /* Opcional: agrega un margen inferior entre botones */
+            color: white;
+        }
+
+        #order-price-menu ul li:hover {
+            background: #facc15;
+            /* Fondo amarillo */
+        }
+
+
+        #order-by-rating {
+            anchor-name: --order-by-rating;
+        }
+
+        #order-rating-menu {
+            inset: unset;
+            top: anchor(--order-by-rating top);
+            left: anchor(--order-by-rating right);
+            /* translate: -50%; */
+            margin-top: 15px;
+            margin-left: 15px;
+            background: #1a202c;
+            /* Color del fondo del header */
+            border: none;
+            /* Sin bordes */
+            border-radius: 0.5rem;
+            padding: 15px;
+            /* Ajuste de padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            /* Sombra más sutil */
+            z-index: 1000;
+        }
+
+        #order-rating-menu ul li {
+            display: block;
+            width: 100%;
+            /* Opcional: para que ocupen todo el ancho */
+            text-align: left;
+            /* Opcional: para alinear el texto a la izquierda */
+            margin-bottom: 0.5rem;
+            /* Opcional: agrega un margen inferior entre botones */
+            color: white;
+        }
+
+        #order-rating-menu ul li:hover {
+            background: #facc15;
+            /* Fondo amarillo */
+        }
+
+        #filter-btn {
+            anchor-name: --anchor-filter;
+        }
+
+        #filter-menu {
+            inset: unset;
+            top: anchor(--anchor-filter top); /* Alinear verticalmente con el botón */
+            right: anchor(--anchor-filter left); /* Posicionar a la izquierda del botón */
+            translate: 0 -75%;
+            margin-top: 15px;
+            margin-right: 3px;
+            background: #1a202c;
+            /* Color del fondo del header */
+            border: none;
+            /* Sin bordes */
+            border-radius: 0.5rem;
+            padding: 15px;
+            /* Ajuste de padding */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+            /* Sombra más sutil */
+            z-index: 1000;
+        }
+
+        #filter-menu ul li {
+            padding: 0.5rem 1rem;
+            /* Espaciado interno */
+            font-size: 1rem;
+            /* Tamaño del texto */
+            font-weight: 500;
+            /* Peso medio */
+            color: white;
+        }
+
+        #filter-menu ul li:hover {
+            background: #facc15;
+            /* Fondo amarillo */
+        }
 
         /* Botones de popovertarget */
         button[popovertarget] {
@@ -152,7 +305,8 @@
                             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2-8H2m5 8h10m-2 0a2 2 0 11-4 0m4 0a2 2 0 11-4 0" />
                     </svg>
                     <!-- Contador del carrito -->
-                    <span id="cart-counter" class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2">0</span>
+                    <span id="cart-counter"
+                        class="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs px-2">0</span>
                 </a>
 
             </div>
@@ -175,13 +329,15 @@
         <!-- Botones con submenús -->
         <div class="flex justify-between items-center mb-6 relative">
             <!-- Botón Ordenar -->
-            <button id="order-btn" class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition" popovertarget="order-menu">
+            <button id="order-btn" class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition"
+                popovertarget="order-menu">
                 Ordenar
             </button>
             <div id="order-menu" popover anchor="order-btn">
                 <ul class="text-gray-700">
                     <!-- Submenú Por Precio -->
-                    <button id="order-by-price" class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer relative" popovertarget="order-price-menu">
+                    <button id="order-by-price" class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer relative"
+                        popovertarget="order-price-menu">
                         Por Precio
                         <div id="order-price-menu" popover anchor="order-by-price">
                             <ul>
@@ -191,7 +347,8 @@
                         </div>
                     </button>
                     <!-- Submenú Por Rating -->
-                    <button id="order-by-rating" class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer relative" popovertarget="order-rating-menu">
+                    <button id="order-by-rating" class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer relative"
+                        popovertarget="order-rating-menu">
                         Por Rating
                         <div id="order-rating-menu" popover anchor="order-by-rating">
                             <ul>
@@ -202,20 +359,28 @@
                     </button>
                 </ul>
             </div>
-        
+
             <!-- Botón Filtrar -->
-            <button id="filter-btn" class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition" popovertarget="filter-menu">
+            <button id="filter-btn" class="bg-gray-900 text-white px-6 py-2 rounded-lg hover:bg-yellow-400 transition"
+                popovertarget="filter-menu">
                 Filtrar
             </button>
             <div id="filter-menu" popover anchor="filter-btn">
                 <ul class="text-gray-700">
-                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Categoría</li>
-                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Marca</li>
-                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Filtrar por Disponibilidad</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Smartwatch</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Wearable</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Fitness Tracker</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Health Monitor</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Bluetooth</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Gps</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Heart Rate</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Sleep tracking</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Notifications</li>
+                    <li class="py-1 hover:bg-gray-100 rounded-lg px-2 cursor-pointer">Touchscreens</li>
                 </ul>
             </div>
         </div>
-        
+
 
         <!-- Grid de productos -->
         <products-viewer class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></products-viewer>
@@ -273,7 +438,7 @@
             </button>
         </form>
     </div>
-    
+
 
 
     <!-- Footer -->
