@@ -25,10 +25,10 @@ function addToCart(product) {
   if (existingIndex > -1) {
     cart[existingIndex].quantity += 1;
   } else {
-    console.log("Producto añadido al carrito:", product); // Verificar datos
+    // console.log("Producto añadido al carrito:", product); // Verificar datos
     cart.push(product);
-    console.log(localStorage.getItem("cart"));
-    console.log(cart);
+    // console.log(localStorage.getItem("cart"));
+    // console.log(cart);
   }
 
   localStorage.setItem("cart", JSON.stringify(cart));
@@ -103,7 +103,7 @@ class ProductsViewer extends HTMLElement {
             image: product.image,
             quantity: 1,
           };
-          console.log("Datos del producto a agregar:", productToAdd); // Verificar datos
+          // console.log("Datos del producto a agregar:", productToAdd); // Verificar datos
           addToCart(productToAdd);
           alert("Producto añadido al carrito");
         });
@@ -131,7 +131,7 @@ class CustomProduct extends HTMLElement {
   constructor() {
     super();
     this.id = getId();
-    console.log({ id: this.id });
+    // console.log({ id: this.id });
   }
 
   connectedCallback() {
@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (e.target.classList.contains("remove-item")) {
       const id = parseInt(e.target.dataset.id); // ID del producto a eliminar
-      
+
       // console.log("ID del producto:", id); // Verificar si el ID se obtiene correctamente
       let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
