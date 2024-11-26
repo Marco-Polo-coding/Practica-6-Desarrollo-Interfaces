@@ -1,6 +1,5 @@
 const keyMappings = {
-  title: "Title:",
-  short_description: "Short description:",
+  short_description: "Description:",
   date: "Launch date:",
   category: "Category:",
   rating: "Rating:",
@@ -116,32 +115,7 @@ class ProductsViewer extends HTMLElement {
 
       // Añadir el producto al componente
       this.appendChild(productContent);
-    });    
-  }
-
-  setupEventListeners() {
-    const orderPriceMenu = document.querySelector("#order-price-menu");
-    orderPriceMenu.addEventListener("click", (e) => {
-      const target = e.target;
-          // Verifica si el elemento clicado es un <li>
-    if (target.tagName === "LI") {
-      const order = target.getAttribute("data-order"); // Obtener el valor del atributo data-order
-      console.log(`Orden seleccionado: ${order}`); // Depuración: verifica el valor
-      this.sortProductsByPrice(order); // Llama a la función para ordenar
-    }
-      if (e.target.textContent === "Ascendente") {
-        this.sortProductsByPrice("asc");
-      } else if (e.target.textContent === "Descendente") {
-        this.sortProductsByPrice("desc");
-      }
     });
-  }
-
-  sortProductsByPrice(order) {
-    const sortedProducts = [...this.products].sort((a, b) => {
-      return order === "asc" ? a.price - b.price : b.price - a.price;
-    });
-    this.renderProducts(sortedProducts);
   }
 }
 
@@ -189,7 +163,7 @@ class CustomProduct extends HTMLElement {
       featuresContainer.classList.add("features", "mt-4");
       for (const [key, value] of Object.entries(product)) {
         if (
-          !["id", "name", "price", "image", "description", "features"].includes(
+          !["id", "name", "price", "image", "description", "features", "title"].includes(
             key
           )
         ) {
@@ -205,7 +179,6 @@ class CustomProduct extends HTMLElement {
         const featuresTitle = document.createElement("p");
         featuresTitle.classList.add("text-gray-800", "font-bold", "mt-4");
         featuresTitle.textContent = "Características:";
-        featuresContainer.appendChild(featuresTitle);
 
         const featuresList = document.createElement("ul");
         featuresList.classList.add("list-disc", "pl-5", "mt-4");
@@ -287,13 +260,17 @@ document.addEventListener("DOMContentLoaded", () => {
         item.title || "Producto"
       }" class="w-16 h-16 rounded-lg object-cover">
           <div class="ml-4">
-            <h2 class="font-semibold">${item.title || "Producto sin nombre"}</h2>
+            <h2 class="font-semibold">${
+              item.title || "Producto sin nombre"
+            }</h2>
             <p class="text-sm text-gray-500">Cantidad: ${item.quantity}</p>
           </div>
         </div>
         <div class="text-right">
           <p class="font-semibold text-lg">${item.price}</p>
-          <button data-id="${item.id}" class="remove-item text-red-500 hover:underline">Eliminar</button>
+          <button data-id="${
+            item.id
+          }" class="remove-item text-red-500 hover:underline">Eliminar</button>
         </div>`;
       cartItemsContainer.appendChild(cartItem);
     });
@@ -301,28 +278,28 @@ document.addEventListener("DOMContentLoaded", () => {
     cartTotalElement.textContent = `${total}€`;
   }
 
-// Delegación de eventos para el botón "Eliminar"
-cartItemsContainer.addEventListener("click", (e) => {
-  if (e.target.classList.contains("remove-item")) {
-    const id = e.target.dataset.id; // ID del producto a eliminar
-    // console.log("ID del producto:", id); // Verificar si el ID se obtiene correctamente
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  // Delegación de eventos para el botón "Eliminar"
+  cartItemsContainer.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-item")) {
+      const id = e.target.dataset.id; // ID del producto a eliminar
+      // console.log("ID del producto:", id); // Verificar si el ID se obtiene correctamente
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
       // Filtrar el carrito excluyendo el producto
       cart = cart.filter((item) => item.id !== id);
 
       if (cart.length === 0) {
-          // Si el carrito está vacío, eliminarlo completamente
-          localStorage.removeItem("cart");
+        // Si el carrito está vacío, eliminarlo completamente
+        localStorage.removeItem("cart");
       } else {
-          // Guardar cambios en localStorage
-          localStorage.setItem("cart", JSON.stringify(cart));
+        // Guardar cambios en localStorage
+        localStorage.setItem("cart", JSON.stringify(cart));
       }
 
       renderCart(); // Actualizar el renderizado del carrito
       updateCartCounter(); // Actualizar el contador del carrito
-  }
-});
+    }
+  });
 
   checkoutButton.addEventListener("click", () => {
     alert("¡Gracias por tu compra!");
@@ -871,4 +848,99 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     console.error("Form with ID 'form-contacto' not found on the page.");
   }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const filterMenu = document.getElementById("filter-menu");
+  const filterButton = document.getElementById("filter-btn");
+  const productsViewer = document.querySelector("products-viewer");
+
+  // Array de etiquetas que quieres usar para filtrar
+  const availableTags = [
+    "GPS",
+    "Heart Rate",
+    "Sleep Tracking",
+    "Water Resistant",
+    "ECG",
+    "Music",
+    "14-Day Battery",
+    "SpO2",
+    "AMOLED Display",
+    "Alexa Built-in",
+  ];
+
+  // Evento para filtrar los productos
+  filterMenu.addEventListener("click", async (event) => {
+    if (event.target.tagName === "LI") {
+      const selectedTag = event.target.textContent.trim();
+
+      // Llama a la API para obtener productos
+      const response = await fetch(
+        "https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets"
+      );
+      const products = await response.json();
+
+      // Filtra los productos por etiquetas
+      const filteredProducts = products.filter((product) =>
+        product.tags.includes(selectedTag)
+      );
+
+      // Renderiza los productos filtrados
+      productsViewer.innerHTML = ""; // Limpia el contenedor
+      productsViewer.renderProducts(filteredProducts);
+    }
+  });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const productsViewer = document.querySelector("products-viewer");
+
+  // Elementos del DOM para ordenar
+  const orderPriceMenu = document.querySelector("#order-price-menu");
+  const orderRatingMenu = document.querySelector("#order-rating-menu");
+
+  // Función para obtener y renderizar productos
+  async function fetchProducts() {
+      try {
+          const response = await fetch("https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets");
+          if (!response.ok) throw new Error("Error al obtener los productos");
+          return await response.json();
+      } catch (error) {
+          console.error("Error:", error);
+          return [];
+      }
+  }
+
+  // Función para ordenar productos
+  function sortProducts(products, criterion, order) {
+      return products.sort((a, b) => {
+          const valueA = parseFloat(a[criterion]);
+          const valueB = parseFloat(b[criterion]);
+          return order === "asc" ? valueA - valueB : valueB - valueA;
+      });
+  }
+
+  // Función para renderizar productos en el viewer
+  async function renderSortedProducts(criterion, order) {
+      const products = await fetchProducts();
+      const sortedProducts = sortProducts(products, criterion, order);
+      productsViewer.innerHTML = ""; // Limpiar contenido existente
+      productsViewer.renderProducts(sortedProducts); // Renderizar productos ordenados
+  }
+
+  // Eventos para ordenar por precio
+  orderPriceMenu.addEventListener("click", (e) => {
+      if (e.target.tagName === "LI") {
+          const order = e.target.textContent === "Ascendente" ? "asc" : "desc";
+          renderSortedProducts("price", order);
+      }
+  });
+
+  // Eventos para ordenar por rating
+  orderRatingMenu.addEventListener("click", (e) => {
+      if (e.target.tagName === "LI") {
+          const order = e.target.textContent === "Ascendente" ? "asc" : "desc";
+          renderSortedProducts("rating", order);
+      }
+  });
 });
