@@ -163,9 +163,15 @@ class CustomProduct extends HTMLElement {
       featuresContainer.classList.add("features", "mt-4");
       for (const [key, value] of Object.entries(product)) {
         if (
-          !["id", "name", "price", "image", "description", "features", "title"].includes(
-            key
-          )
+          ![
+            "id",
+            "name",
+            "price",
+            "image",
+            "description",
+            "features",
+            "title",
+          ].includes(key)
         ) {
           const feature = document.createElement("p");
           feature.classList.add("text-gray-700", "mb-2");
@@ -222,12 +228,15 @@ class CustomProduct extends HTMLElement {
 
 customElements.define("custom-product", CustomProduct);
 
+
+
 // Renderizar el carrito en carrito.html
 document.addEventListener("DOMContentLoaded", () => {
   const cartItemsContainer = document.getElementById("cart-items");
   const cartTotalElement = document.getElementById("cart-total");
   const checkoutButton = document.getElementById("checkout-button");
-
+  
+  
   function renderCart() {
     const cart = JSON.parse(localStorage.getItem("cart")) || [];
     // console.log("Datos actuales del carrito:", cart); // Verificar el contenido del carrito
@@ -263,7 +272,12 @@ document.addEventListener("DOMContentLoaded", () => {
             <h2 class="font-semibold">${
               item.title || "Producto sin nombre"
             }</h2>
-            <p class="text-sm text-gray-500">Cantidad: ${item.quantity}</p>
+            <p class="text-sm text-gray-500">Cantidad: 
+            <button class="decrement-quantity text-gray-500 px-2" data-id="${item.id}">-</button>
+            <span class="quantity">${item.quantity}</span>
+            <button class="increment-quantity text-gray-500 px-2" data-id="${item.id}">+</button>
+            </p>
+            <!-- <p class="text-sm text-gray-500">Cantidad: ${item.quantity}</p> -->
           </div>
         </div>
         <div class="text-right">
@@ -276,11 +290,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     cartTotalElement.textContent = `${total}€`;
+
+        // Añadir eventos a los botones de incrementar y decrecer cantidad
+        document.querySelectorAll(".increment-quantity").forEach((button) => {
+          button.addEventListener("click", (e) => {
+            // console.log("Patata");
+              const id = parseInt(e.target.dataset.id);
+              updateQuantity(id, 1);
+          });
+      });
+  
+      document.querySelectorAll(".decrement-quantity").forEach((button) => {
+          button.addEventListener("click", (e) => {
+            // console.log("Patata");
+              const id = parseInt(e.target.dataset.id);
+              updateQuantity(id, -1);
+          });
+      });
+
+  }
+
+  function updateQuantity(id, delta) {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const itemIndex = cart.findIndex((item) => item.id === id);
+  
+    if (itemIndex > -1) {
+        cart[itemIndex].quantity += delta;
+  
+        // Evitar cantidades menores a 1
+        if (cart[itemIndex].quantity <= 0) {
+            cart.splice(itemIndex, 1); // Eliminar el producto si la cantidad es 0
+        }
+    }
+  
+    localStorage.setItem("cart", JSON.stringify(cart));
+    renderCart(); // Actualizar la vista del carrito
+    updateCartCounter(); // Actualizar el contador del carrito
   }
 
   // Delegación de eventos para el botón "Eliminar"
   cartItemsContainer.addEventListener("click", (e) => {
-
     if (e.target.classList.contains("remove-item")) {
       const id = parseInt(e.target.dataset.id); // ID del producto a eliminar
 
@@ -903,46 +952,48 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para obtener y renderizar productos
   async function fetchProducts() {
-      try {
-          const response = await fetch("https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets");
-          if (!response.ok) throw new Error("Error al obtener los productos");
-          return await response.json();
-      } catch (error) {
-          console.error("Error:", error);
-          return [];
-      }
+    try {
+      const response = await fetch(
+        "https://products-foniuhqsba-uc.a.run.app/Smartwatches%20and%20gadgets"
+      );
+      if (!response.ok) throw new Error("Error al obtener los productos");
+      return await response.json();
+    } catch (error) {
+      console.error("Error:", error);
+      return [];
+    }
   }
 
   // Función para ordenar productos
   function sortProducts(products, criterion, order) {
-      return products.sort((a, b) => {
-          const valueA = parseFloat(a[criterion]);
-          const valueB = parseFloat(b[criterion]);
-          return order === "asc" ? valueA - valueB : valueB - valueA;
-      });
+    return products.sort((a, b) => {
+      const valueA = parseFloat(a[criterion]);
+      const valueB = parseFloat(b[criterion]);
+      return order === "asc" ? valueA - valueB : valueB - valueA;
+    });
   }
 
   // Función para renderizar productos en el viewer
   async function renderSortedProducts(criterion, order) {
-      const products = await fetchProducts();
-      const sortedProducts = sortProducts(products, criterion, order);
-      productsViewer.innerHTML = ""; // Limpiar contenido existente
-      productsViewer.renderProducts(sortedProducts); // Renderizar productos ordenados
+    const products = await fetchProducts();
+    const sortedProducts = sortProducts(products, criterion, order);
+    productsViewer.innerHTML = ""; // Limpiar contenido existente
+    productsViewer.renderProducts(sortedProducts); // Renderizar productos ordenados
   }
 
   // Eventos para ordenar por precio
   orderPriceMenu.addEventListener("click", (e) => {
-      if (e.target.tagName === "LI") {
-          const order = e.target.textContent === "Ascendente" ? "asc" : "desc";
-          renderSortedProducts("price", order);
-      }
+    if (e.target.tagName === "LI") {
+      const order = e.target.textContent === "Ascendente" ? "asc" : "desc";
+      renderSortedProducts("price", order);
+    }
   });
 
   // Eventos para ordenar por rating
   orderRatingMenu.addEventListener("click", (e) => {
-      if (e.target.tagName === "LI") {
-          const order = e.target.textContent === "Ascendente" ? "asc" : "desc";
-          renderSortedProducts("rating", order);
-      }
+    if (e.target.tagName === "LI") {
+      const order = e.target.textContent === "Ascendente" ? "asc" : "desc";
+      renderSortedProducts("rating", order);
+    }
   });
 });
